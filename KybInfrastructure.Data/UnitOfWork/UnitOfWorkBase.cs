@@ -9,18 +9,18 @@ namespace KybInfrastructure.Data
     public abstract class UnitOfWorkBase<TContext> : IUnitOfWork
         where TContext : class, IDatabaseContext, new()
     {
-        protected readonly TContext _context;
+        protected readonly TContext DatabaseContext;
 
         public UnitOfWorkBase(TContext context)
         {
-            _context = context;
+            DatabaseContext = context;
         }
 
         public abstract int SaveChanges();
 
         public void Dispose()
         {
-            _context.Dispose();
+            DatabaseContext.Dispose();
             GC.SuppressFinalize(this);
         }
     }
