@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Data", "K
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Data.Test", "KybInfrastructure.Data.Test\KybInfrastructure.Data.Test.csproj", "{863C6EFD-21DD-4DD6-895E-4845D248D22D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KybInfrastructure.Server", "KybInfrastructure.Server\KybInfrastructure.Server.csproj", "{C519645A-487F-4A90-BD13-C7C1F159C890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Server", "KybInfrastructure.Server\KybInfrastructure.Server.csproj", "{C519645A-487F-4A90-BD13-C7C1F159C890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KybInfrastructure.Server.Test", "KybInfrastructure.Server.Test\KybInfrastructure.Server.Test.csproj", "{F23B6F5A-613C-4075-95B9-62060F77839F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Server.Test", "KybInfrastructure.Server.Test\KybInfrastructure.Server.Test.csproj", "{F23B6F5A-613C-4075-95B9-62060F77839F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
