@@ -6,14 +6,17 @@ namespace KybInfrastructure.Core
     /// <summary>
     /// Generic abstract IModuleDescriptor base implementation
     /// </summary>
-    public abstract class ModuleDescriptorBase<TModule, TModuleContext> : IModuleDescriptor
+    public abstract class ModuleDescriptorBase<TModuleContext> : IModuleDescriptor
+        where TModuleContext : IModuleContext
     {
         protected readonly TModuleContext _moduleContext;
 
-        public ModuleDescriptorBase(TModuleContext moduleContext)
+        protected ModuleDescriptorBase(TModuleContext moduleContext)
         {
             _moduleContext = moduleContext;
         }
+
+        protected ModuleDescriptorBase() { }
 
         /// <summary>
         /// Returns the module's service descriptors

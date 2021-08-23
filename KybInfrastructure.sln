@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Server", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Server.Test", "KybInfrastructure.Server.Test\KybInfrastructure.Server.Test.csproj", "{F23B6F5A-613C-4075-95B9-62060F77839F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KybInfrastructure.Demo", "KybInfrastructure.Demo\KybInfrastructure.Demo.csproj", "{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{42DC1307-90D7-4BFA-A8B4-19748E994F87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{F23B6F5A-613C-4075-95B9-62060F77839F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F23B6F5A-613C-4075-95B9-62060F77839F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F23B6F5A-613C-4075-95B9-62060F77839F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +68,7 @@ Global
 		{863C6EFD-21DD-4DD6-895E-4845D248D22D} = {838D8240-1CFD-4EE7-8154-64DA60740096}
 		{C519645A-487F-4A90-BD13-C7C1F159C890} = {30F6A5AF-84B1-4310-A9B6-53B361210BE1}
 		{F23B6F5A-613C-4075-95B9-62060F77839F} = {838D8240-1CFD-4EE7-8154-64DA60740096}
+		{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90} = {42DC1307-90D7-4BFA-A8B4-19748E994F87}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44FB19BD-406C-4DAB-9374-7F0B1BC0656F}

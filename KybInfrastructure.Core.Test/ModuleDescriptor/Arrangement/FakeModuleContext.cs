@@ -1,6 +1,6 @@
 ﻿namespace KybInfrastructure.Core.Test
 {
-    public class FakeModuleContext
+    public class FakeModuleContext : IModuleContext
     {
         public string ConnectionString { get; set; }
     }

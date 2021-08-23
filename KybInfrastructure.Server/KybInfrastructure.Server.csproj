@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KybInfrastructure.Core\KybInfrastructure.Core.csproj" />
     <ProjectReference Include="..\KybInfrastructure.Data\KybInfrastructure.Data.csproj" />
   </ItemGroup>
 

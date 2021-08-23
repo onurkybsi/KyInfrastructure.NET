@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace KybInfrastructure.Core.Test
 {
-    public class FakeModule : ModuleDescriptorBase<FakeModule, FakeModuleContext>
+    public class FakeModule : ModuleDescriptorBase<FakeModuleContext>
     {
         public FakeModule(FakeModuleContext moduleContext) : base(moduleContext) { }
 
