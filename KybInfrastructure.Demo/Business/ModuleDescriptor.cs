@@ -9,7 +9,10 @@ namespace KybInfrastructure.Demo.Business
 
         public override List<ServiceDescriptor> GetDescriptors()
         {
-            return new List<ServiceDescriptor>();
+            return new List<ServiceDescriptor>
+            {
+                ServiceDescriptor.Singleton<IUserService, UserService>()
+            };
         }
     }
 }

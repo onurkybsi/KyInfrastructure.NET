@@ -1,17 +1,23 @@
-﻿using System;
+﻿using KybInfrastructure.Data;
 
 namespace KybInfrastructure.Demo.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : UnitOfWorkBase<KybInfrastructureDemoDbContext>, IUnitOfWork
     {
-        public void Dispose()
+        public UnitOfWork(KybInfrastructureDemoDbContext dbContext) : base(dbContext) { }
+
+        private IUserRepository userRepository;
+        public IUserRepository UserRepository
         {
-            throw new NotImplementedException();
+            get
+            {
+                if (userRepository is null)
+                    userRepository = new UserRepository(DatabaseContext);
+                return userRepository;
+            }
         }
 
-        public int SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
+        public override int SaveChanges()
+            => DatabaseContext.SaveChanges();
     }
 }

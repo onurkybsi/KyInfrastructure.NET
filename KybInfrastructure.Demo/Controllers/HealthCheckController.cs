@@ -5,8 +5,8 @@ namespace KybInfrastructure.Demo.Controllers
     /// <summary>
     /// Endpoints which provide liveness info of the server
     /// </summary>
-    [ApiController]
     [Route("[controller]/[action]")]
+    [ApiController]
     public class HealthCheckController : ControllerBase
     {
         /// <summary>

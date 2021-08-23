@@ -11,6 +11,8 @@ namespace KybInfrastructure.Demo.Data
         {
             return new List<ServiceDescriptor>
             {
+                new ServiceDescriptor(typeof(KybInfrastructureDemoDbContext), (serviceProvider) => new KybInfrastructureDemoDbContext(),
+                    ServiceLifetime.Scoped),
                 ServiceDescriptor.Scoped<IUnitOfWork, UnitOfWork>()
             };
         }
