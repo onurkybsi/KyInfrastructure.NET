@@ -1,18 +1,11 @@
 ﻿using KybInfrastructure.Data;
-using System;
 
 namespace KybInfrastructure.Demo.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : UnitOfWorkBase, IUnitOfWork
     {
-        private readonly MongoContext _mongoContext;
-        private readonly KybInfrastructureDemoDbContext _efContext;
-
-        public UnitOfWork(KybInfrastructureDemoDbContext efContext, MongoContext mongoContext)
-        {
-            _mongoContext = mongoContext;
-            _efContext = efContext;
-        }
+        public UnitOfWork(MongoContext mongoContext, KybInfrastructureDemoDbContext efContext)
+            : base(mongoContext, efContext) { }
 
         private IProductRepository productRepository;
         public IProductRepository ProductRepository
@@ -20,7 +13,7 @@ namespace KybInfrastructure.Demo.Data
             get
             {
                 if (productRepository is null)
-                    productRepository = new ProductRepository(_efContext);
+                    productRepository = new ProductRepository(GetContext<KybInfrastructureDemoDbContext>());
                 return productRepository;
             }
         }
@@ -31,23 +24,20 @@ namespace KybInfrastructure.Demo.Data
             get
             {
                 if (userRepository is null)
-                    userRepository = new UserRepository(_mongoContext);
+                    userRepository = new UserRepository(GetContext<MongoContext>());
                 return userRepository;
             }
         }
 
-        public int SaveChanges()
+        public override int SaveChanges()
         {
-            int changedInMongo = _mongoContext.SaveChanges();
-            int changedInEf = _efContext.SaveChanges();
-            return changedInMongo + changedInEf;
-        }
-
-        public void Dispose()
-        {
-            _mongoContext.Dispose();
-            _efContext.Dispose();
-            GC.SuppressFinalize(this);
+            IDatabaseContext[] contexts = GetContextsThatHaveChanges();
+            int totalChanges = 0;
+            foreach (var context in contexts)
+            {
+                totalChanges += context.SaveChanges();
+            }
+            return totalChanges;
         }
     }
 }

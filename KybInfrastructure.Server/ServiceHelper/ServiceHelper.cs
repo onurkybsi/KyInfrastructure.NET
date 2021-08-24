@@ -27,17 +27,17 @@ namespace KybInfrastructure.Server
 
         private static Action beforeBuildAction;
         /// <summary>
-        /// Sets action which executes before ServiceHelper build
+        /// Sets action which executes before ServiceHelper building
         /// </summary>
-        /// <param name="action">Action</param>
+        /// <param name="action">Before building action</param>
         public static void SetBeforeBuildAction(Action action)
             => beforeBuildAction = action;
 
         private static Action afterBuildAction;
         /// <summary>
-        /// Sets action which executes after ServiceHelper build
+        /// Sets action which executes after ServiceHelper building
         /// </summary>
-        /// <param name="action">Action</param>
+        /// <param name="action">After building action</param>
         public static void SetAfterBuildAction(Action action)
             => afterBuildAction = action;
 
@@ -50,7 +50,7 @@ namespace KybInfrastructure.Server
         }
 
         /// <summary>
-        /// Returns requested service from application service collections
+        /// Returns registered service from application service collection
         /// </summary>
         /// <typeparam name="T">Type of service</typeparam>
         /// <returns></returns>

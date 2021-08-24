@@ -10,13 +10,13 @@ namespace KybInfrastructure.Server
     public static class UnitOfWorkRegister
     {
         /// <summary>
-        /// Set UnitOfWork objects lifetime
+        /// Set UnitOfWork objects lifetime in the service collection
         /// </summary>
         /// <typeparam name="TDatabaseContext">Database context used by UnitOfWork</typeparam>
         /// <typeparam name="TIUnitOfWork">UnitOfWork interface</typeparam>
         /// <typeparam name="TUnitOfWork">UnitOfWork implementation</typeparam>
         /// <param name="services"></param>
-        /// <returns>IServiceCollection itself</returns>
+        /// <returns></returns>
         public static IServiceCollection AddUnitOfWork<TDatabaseContext, TIUnitOfWork, TUnitOfWork>(this IServiceCollection services)
             where TDatabaseContext : class, IDatabaseContext, new()
             where TIUnitOfWork : class, IUnitOfWork
@@ -29,13 +29,13 @@ namespace KybInfrastructure.Server
         }
 
         /// <summary>
-        /// Set Entity Framework UnitOfWork objects lifetime
+        /// Set Entity Framework UnitOfWork objects lifetime in the service collection
         /// </summary>
         /// <typeparam name="TDatabaseContext">Database context used by Entity Framework UnitOfWork</typeparam>
         /// <typeparam name="TIUnitOfWork">UnitOfWork interface</typeparam>
         /// <typeparam name="TUnitOfWork">UnitOfWork implementation</typeparam>
         /// <param name="services"></param>
-        /// <returns>IServiceCollection itself</returns>
+        /// <returns></returns>
         public static IServiceCollection AddEfUnitOfWork<TDatabaseContext, TIUnitOfWork, TUnitOfWork>(this IServiceCollection services)
             where TDatabaseContext : DbContext, IDatabaseContext, new()
             where TIUnitOfWork : class, IUnitOfWork

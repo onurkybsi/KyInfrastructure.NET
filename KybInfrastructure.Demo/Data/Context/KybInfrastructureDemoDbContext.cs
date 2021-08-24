@@ -1,10 +1,10 @@
 ﻿using KybInfrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
 
 namespace KybInfrastructure.Demo.Data
 {
-    public partial class KybInfrastructureDemoDbContext : DbContext, IDatabaseContext
+    public partial class KybInfrastructureDemoDbContext : EfContext<KybInfrastructureDemoDbContext>, IDatabaseContext
     {
         public KybInfrastructureDemoDbContext() { }
 

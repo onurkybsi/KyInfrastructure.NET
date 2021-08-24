@@ -3,7 +3,7 @@
 namespace KybInfrastructure.Data
 {
     /// <summary>
-    /// Design pattern that manages data transactions
+    /// A design pattern interface that manages data transactions
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {

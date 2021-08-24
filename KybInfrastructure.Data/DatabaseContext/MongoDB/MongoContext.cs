@@ -9,19 +9,23 @@ namespace KybInfrastructure.Data
     /// </summary>
     public class MongoContext : IMongoContext
     {
+        private bool _thereAreChanges;
+
         private readonly IMongoDatabase _databaseAccessor;
 
-        private readonly List<Action<IMongoDatabase>> _changeOperations;
+        private readonly List<Action<IMongoDatabase>> _changeOperations = new List<Action<IMongoDatabase>>();
 
+        /// <summary>
+        /// Default IMongoContext implementation
+        /// </summary>
+        /// <param name="databaseAccessor">IMongoDatabase object that provide access to database</param>
         public MongoContext(IMongoDatabase databaseAccessor)
         {
-            _changeOperations = new List<Action<IMongoDatabase>>();
-
             _databaseAccessor = databaseAccessor;
         }
 
         /// <summary>
-        /// Returns the collection in the database according to the collection name
+        /// Returns the collection in the database according to the given collection name
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <param name="collectionName">The name of the collection to be accessed</param>
@@ -35,7 +39,14 @@ namespace KybInfrastructure.Data
                 throw new ArgumentNullException(nameof(operation));
 
             _changeOperations.Add(operation);
+            _thereAreChanges = true;
         }
+
+        public bool AreThereAnyChanges()
+            => _thereAreChanges;
+
+        public void Rollback()
+            => _changeOperations.Clear();
 
         public int SaveChanges()
         {

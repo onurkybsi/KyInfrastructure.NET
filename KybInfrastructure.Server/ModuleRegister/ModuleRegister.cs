@@ -5,17 +5,17 @@ using System;
 namespace KybInfrastructure.Server
 {
     /// <summary>
-    /// Contains dependency registration strategies of a module to the server application
+    /// Contains registration strategies of a module to the server application via IModuleDescriptor
     /// </summary>
     public static class ModuleRegister
     {
         /// <summary>
-        /// Middleware that adds a module to service collections
+        /// Middleware that adds a module descriptions to service collections
         /// </summary>
         /// <typeparam name="TModuleDescriptor">Module descriptor type</typeparam>
         /// <typeparam name="TModuleContext">Module context type</typeparam>
         /// <param name="services"></param>
-        /// <param name="context">Context instance of module that use in creation o module descriptor</param>
+        /// <param name="context">Context instance of the module that to be used in creation of the module descriptor</param>
         /// <returns></returns>
         public static IServiceCollection AddModule<TModuleDescriptor, TModuleContext>(this IServiceCollection services, TModuleContext context)
             where TModuleDescriptor : IModuleDescriptor
@@ -31,7 +31,7 @@ namespace KybInfrastructure.Server
         }
 
         /// <summary>
-        /// Middleware that adds a module to service collections
+        /// Middleware that adds a module descriptions to service collections
         /// </summary>
         /// <typeparam name="TModuleDescriptor">Module descriptor type</typeparam>
         /// <param name="services"></param>

@@ -1,26 +1,50 @@
 ﻿using System;
+using System.Linq;
 
 namespace KybInfrastructure.Data
 {
     /// <summary>
-    /// Generic abstract IUnitOfWork base implementation
+    /// Abstract IUnitOfWork base implementation
     /// </summary>
-    /// <typeparam name="TContext"></typeparam>
-    public abstract class UnitOfWorkBase<TContext> : IUnitOfWork
-        where TContext : class, IDatabaseContext, new()
+    public abstract class UnitOfWorkBase : IUnitOfWork
     {
-        protected readonly TContext DatabaseContext;
+        /// <summary>
+        /// Database contexts used by unit of work
+        /// </summary>
+        protected readonly IDatabaseContext[] DatabaseContexts;
 
-        public UnitOfWorkBase(TContext context)
+        /// <summary>
+        /// Abstract IUnitOfWork base implementation
+        /// </summary>
+        /// <param name="databaseContexts">Database contexts to be used by unit of work</param>
+        public UnitOfWorkBase(params IDatabaseContext[] databaseContexts)
         {
-            DatabaseContext = context;
+            DatabaseContexts = databaseContexts;
         }
+
+        /// <summary>
+        /// Returns existing database context by type
+        /// </summary>
+        /// <typeparam name="TContext">Database context type</typeparam>
+        /// <returns>Database context</returns>
+        protected TContext GetContext<TContext>()
+            => (TContext)DatabaseContexts.FirstOrDefault(context => context.GetType() == typeof(TContext));
+
+        /// <summary>
+        /// Returns existing database contexts that have changes
+        /// </summary>
+        /// <returns>Database contexts</returns>
+        protected IDatabaseContext[] GetContextsThatHaveChanges()
+            => DatabaseContexts
+                .Where(context => context.AreThereAnyChanges())
+                .ToArray();
 
         public abstract int SaveChanges();
 
         public void Dispose()
         {
-            DatabaseContext.Dispose();
+            foreach (var databaseContext in DatabaseContexts)
+                databaseContext.Dispose();
             GC.SuppressFinalize(this);
         }
     }

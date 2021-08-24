@@ -7,14 +7,17 @@ using System.Linq.Expressions;
 namespace KybInfrastructure.Data
 {
     /// <summary>
-    /// Entity repository that represents SQL table
+    /// Base implementation for EF repositories
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
     public class EFRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
         protected readonly DbSet<TEntity> DbSet;
 
+        /// <summary>
+        /// Base implementation for EF repositories
+        /// </summary>
+        /// <param name="context">Database context</param>
         protected EFRepository(DbContext context)
         {
             if (context is null)

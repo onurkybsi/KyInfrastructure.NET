@@ -12,9 +12,9 @@ namespace KybInfrastructure.Server
     public static class MongoContextRegister
     {
         /// <summary>
-        /// Set MongoContext objects lifetime
+        /// Set MongoContext objects lifetime via IServiceCollection
         /// </summary>
-        /// <param name="services">Services collection</param>
+        /// <param name="services"></param>
         /// <param name="mongoDbConnectionString">Connection string of MongoDb server</param>
         /// <param name="databaseName">Database name that is requested connection</param>
         /// <returns></returns>
