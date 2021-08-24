@@ -15,7 +15,7 @@ namespace KybInfrastructure.Data
     {
         protected readonly DbSet<TEntity> DbSet;
 
-        public EFRepository(DbContext context)
+        protected EFRepository(DbContext context)
         {
             if (context is null)
                 throw new ArgumentNullException("DbContext cannot be null.");

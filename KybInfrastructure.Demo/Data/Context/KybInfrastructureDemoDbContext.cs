@@ -1,6 +1,7 @@
 ﻿using KybInfrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace KybInfrastructure.Demo.Data
 {
     public partial class KybInfrastructureDemoDbContext : DbContext, IDatabaseContext
@@ -10,13 +11,13 @@ namespace KybInfrastructure.Demo.Data
         public KybInfrastructureDemoDbContext(DbContextOptions<KybInfrastructureDemoDbContext> options)
             : base(options) { }
 
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=KybInfrastructureDemoDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=KybInfrastructureDemoDb");
             }
         }
 
@@ -24,7 +25,7 @@ namespace KybInfrastructure.Demo.Data
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.ApplyConfiguration<User>(new UserConfiguration());
+            modelBuilder.ApplyConfiguration<Product>(new ProductConfiguration());
 
             OnModelCreatingPartial(modelBuilder);
         }

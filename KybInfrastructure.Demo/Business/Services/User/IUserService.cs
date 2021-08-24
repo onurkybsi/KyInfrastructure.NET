@@ -6,5 +6,6 @@ namespace KybInfrastructure.Demo.Business
     {
         List<User> GetAllUsers();
         List<User> GetAdminUsers();
+        void AddUser(User user);
     }
 }

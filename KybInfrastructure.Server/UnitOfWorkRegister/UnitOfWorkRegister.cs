@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace KybInfrastructure.Server
 {
     /// <summary>
-    /// Contains UnitOfWork build strategies
+    /// Contains UnitOfWork registration strategies
     /// </summary>
-    public static class UnitOfWorkBuilder
+    public static class UnitOfWorkRegister
     {
         /// <summary>
         /// Set UnitOfWork objects lifetime

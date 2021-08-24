@@ -8,6 +8,7 @@ namespace KybInfrastructure.Demo.Utils
             cfg =>
             {
                 cfg.CreateMap<Data.User, Business.User>().ReverseMap();
+                cfg.CreateMap<Data.Product, Business.Product>().ReverseMap();
             }
         ));
 

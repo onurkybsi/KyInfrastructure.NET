@@ -9,11 +9,11 @@ namespace KybInfrastructure.Core
     public abstract class ModuleDescriptorBase<TModuleContext> : IModuleDescriptor
         where TModuleContext : IModuleContext
     {
-        protected readonly TModuleContext _moduleContext;
+        protected readonly TModuleContext ModuleContext;
 
         protected ModuleDescriptorBase(TModuleContext moduleContext)
         {
-            _moduleContext = moduleContext;
+            ModuleContext = moduleContext;
         }
 
         protected ModuleDescriptorBase() { }

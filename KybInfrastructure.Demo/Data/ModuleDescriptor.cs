@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using KybInfrastructure.Data;
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using System.Collections.Generic;
 
 namespace KybInfrastructure.Demo.Data
@@ -11,6 +13,12 @@ namespace KybInfrastructure.Demo.Data
         {
             return new List<ServiceDescriptor>
             {
+                ServiceDescriptor.Singleton<IMongoClient>((serviceProvider) => {
+                    MongoClientSettings settings = MongoClientSettings.FromConnectionString(ModuleContext.MongoDbConnectionString);
+                    return new MongoClient(settings);
+                }),
+                new ServiceDescriptor(typeof(MongoContext), (serviceProvider) => new MongoContext(serviceProvider.GetRequiredService<IMongoClient>().GetDatabase("KybInfrastructureDemoDb")),
+                    ServiceLifetime.Scoped),
                 new ServiceDescriptor(typeof(KybInfrastructureDemoDbContext), (serviceProvider) => new KybInfrastructureDemoDbContext(),
                     ServiceLifetime.Scoped),
                 ServiceDescriptor.Scoped<IUnitOfWork, UnitOfWork>()

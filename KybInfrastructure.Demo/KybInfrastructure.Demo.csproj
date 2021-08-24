@@ -19,4 +19,8 @@
     <ProjectReference Include="..\KybInfrastructure.Server\KybInfrastructure.Server.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Context\" />
+  </ItemGroup>
+
 </Project>

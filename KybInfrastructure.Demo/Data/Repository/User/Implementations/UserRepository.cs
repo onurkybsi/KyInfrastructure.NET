@@ -2,8 +2,10 @@
 
 namespace KybInfrastructure.Demo.Data
 {
-    public class UserRepository : EFRepository<User>, IUserRepository
+    public class UserRepository : MongoRepository<User>, IUserRepository
     {
-        public UserRepository(KybInfrastructureDemoDbContext dbContext) : base(dbContext) { }
+        private const string USER_COLLECTION_NAME = "User";
+
+        public UserRepository(MongoContext context) : base(context, USER_COLLECTION_NAME) { }
     }
 }
