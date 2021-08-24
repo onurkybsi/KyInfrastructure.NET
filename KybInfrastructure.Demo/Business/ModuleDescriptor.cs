@@ -11,7 +11,7 @@ namespace KybInfrastructure.Demo.Business
         {
             return new List<ServiceDescriptor>
             {
-                ServiceDescriptor.Singleton<IUserService, UserService>(),
+                ServiceDescriptor.Scoped<IUserService, UserService>(),
                 ServiceDescriptor.Singleton<IProductService, ProductService>()
             };
         }

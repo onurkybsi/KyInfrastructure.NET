@@ -20,7 +20,10 @@ namespace KybInfrastructure.Demo
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddModule<Data.ModuleDescriptor, Data.ModuleContext>(new Data.ModuleContext { MongoDbConnectionString = "mongodb://localhost:27017" });
+            services.AddModule<Data.ModuleDescriptor, Data.ModuleContext>(new Data.ModuleContext
+            {
+                MongoDbConnectionString = "mongodb://localhost:27017"
+            });
             services.AddModule<Business.ModuleDescriptor, Business.ModuleContext>(new Business.ModuleContext());
             services.AddControllers();
             services.AddSwaggerGen(c =>

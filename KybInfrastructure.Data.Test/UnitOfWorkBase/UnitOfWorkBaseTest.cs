@@ -6,12 +6,12 @@ namespace KybInfrastructure.Data.Test
     public class UnitOfWorkBaseTest
     {
         private readonly Mock<FakeDatabaseContext> fakeDatabaseContext;
-        private readonly Mock<UnitOfWorkBase> fakeUnitOfWork;
+        private readonly Mock<UnitOfWorkBase<FakeDatabaseContext>> fakeUnitOfWork;
 
         public UnitOfWorkBaseTest()
         {
             fakeDatabaseContext = new Mock<FakeDatabaseContext>();
-            fakeUnitOfWork = new Mock<UnitOfWorkBase>(fakeDatabaseContext.Object);
+            fakeUnitOfWork = new Mock<UnitOfWorkBase<FakeDatabaseContext>>(fakeDatabaseContext.Object);
         }
 
         [Fact]

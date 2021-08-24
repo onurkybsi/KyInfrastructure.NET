@@ -12,8 +12,12 @@ namespace KybInfrastructure.Data
     public class MongoRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
-        private readonly MongoContext _context;
         private readonly string _collectionName;
+
+        /// <summary>
+        /// MongoContext instance
+        /// </summary>
+        protected readonly MongoContext Context;
 
         /// <summary>
         /// Represents the collection of entity which is in the database
@@ -27,9 +31,9 @@ namespace KybInfrastructure.Data
         /// <param name="collectionName">Name of the collection in the database</param>
         protected MongoRepository(MongoContext context, string collectionName)
         {
-            _context = context;
+            Context = context;
             _collectionName = collectionName;
-            Collection = _context.GetCollection<TEntity>(collectionName);
+            Collection = Context.GetCollection<TEntity>(collectionName);
         }
 
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
@@ -42,18 +46,18 @@ namespace KybInfrastructure.Data
                 ? default
                 : Collection.Find(new ExpressionFilterDefinition<TEntity>(filter)).ToList();
 
-        public void Add(TEntity entity)
-            => _context.AddOperation((db) =>
+        public virtual void Add(TEntity entity)
+            => Context.AddOperation((db) =>
             {
                 db.GetCollection<TEntity>(_collectionName).InsertOne(entity);
             });
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             throw new NotImplementedException();
         }

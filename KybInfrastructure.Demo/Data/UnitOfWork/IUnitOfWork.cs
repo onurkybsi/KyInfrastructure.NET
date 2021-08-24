@@ -2,7 +2,6 @@
 {
     public interface IUnitOfWork : KybInfrastructure.Data.IUnitOfWork
     {
-        IUserRepository UserRepository { get; }
         IProductRepository ProductRepository { get; }
     }
 }

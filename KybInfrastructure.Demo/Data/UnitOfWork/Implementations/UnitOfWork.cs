@@ -2,10 +2,9 @@
 
 namespace KybInfrastructure.Demo.Data
 {
-    public class UnitOfWork : UnitOfWorkBase, IUnitOfWork
+    public class UnitOfWork : UnitOfWorkBase<KybInfrastructureDemoDbContext>, IUnitOfWork
     {
-        public UnitOfWork(MongoContext mongoContext, KybInfrastructureDemoDbContext efContext)
-            : base(mongoContext, efContext) { }
+        public UnitOfWork(KybInfrastructureDemoDbContext efContext) : base(efContext) { }
 
         private IProductRepository productRepository;
         public IProductRepository ProductRepository
@@ -13,31 +12,12 @@ namespace KybInfrastructure.Demo.Data
             get
             {
                 if (productRepository is null)
-                    productRepository = new ProductRepository(GetContext<KybInfrastructureDemoDbContext>());
+                    productRepository = new ProductRepository(DatabaseContext);
                 return productRepository;
             }
         }
 
-        private IUserRepository userRepository;
-        public IUserRepository UserRepository
-        {
-            get
-            {
-                if (userRepository is null)
-                    userRepository = new UserRepository(GetContext<MongoContext>());
-                return userRepository;
-            }
-        }
-
         public override int SaveChanges()
-        {
-            IDatabaseContext[] contexts = GetContextsThatHaveChanges();
-            int totalChanges = 0;
-            foreach (var context in contexts)
-            {
-                totalChanges += context.SaveChanges();
-            }
-            return totalChanges;
-        }
+            => DatabaseContext.SaveChanges();
     }
 }
