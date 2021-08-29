@@ -5,15 +5,11 @@ namespace KybInfrastructure.Demo.Business
 {
     public class ModuleDescriptor : Core.ModuleDescriptorBase<ModuleContext>
     {
-        public ModuleDescriptor(ModuleContext context) : base(context) { }
-
-        public override List<ServiceDescriptor> GetDescriptors()
-        {
-            return new List<ServiceDescriptor>
+        public ModuleDescriptor(ModuleContext context) : base(new List<ServiceDescriptor>
             {
                 ServiceDescriptor.Scoped<IUserService, UserService>(),
                 ServiceDescriptor.Singleton<IProductService, ProductService>()
-            };
-        }
+            }, context)
+        { }
     }
 }

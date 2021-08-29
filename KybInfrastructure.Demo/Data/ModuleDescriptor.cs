@@ -7,14 +7,10 @@ namespace KybInfrastructure.Demo.Data
 {
     public class ModuleDescriptor : Core.ModuleDescriptorBase<ModuleContext>
     {
-        public ModuleDescriptor(ModuleContext context) : base(context) { }
-
-        public override List<ServiceDescriptor> GetDescriptors()
-        {
-            return new List<ServiceDescriptor>
+        public ModuleDescriptor(ModuleContext context) : base(new List<ServiceDescriptor>
             {
                 ServiceDescriptor.Singleton<IMongoClient>((serviceProvider) => {
-                    MongoClientSettings settings = MongoClientSettings.FromConnectionString(ModuleContext.MongoDbConnectionString);
+                    MongoClientSettings settings = MongoClientSettings.FromConnectionString(context.MongoDbConnectionString);
                     return new MongoClient(settings);
                 }),
                 new ServiceDescriptor(typeof(MongoContext), (serviceProvider) => new MongoContext(serviceProvider.GetRequiredService<IMongoClient>().GetDatabase("KybInfrastructureDemoDb")),
@@ -23,7 +19,7 @@ namespace KybInfrastructure.Demo.Data
                 new ServiceDescriptor(typeof(KybInfrastructureDemoDbContext), (serviceProvider) => new KybInfrastructureDemoDbContext(),
                     ServiceLifetime.Scoped),
                 ServiceDescriptor.Scoped<IUnitOfWork, UnitOfWork>()
-            };
-        }
+            }, context)
+        { }
     }
 }
