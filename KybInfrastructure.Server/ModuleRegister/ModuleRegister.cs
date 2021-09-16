@@ -1,6 +1,7 @@
 ﻿using KybInfrastructure.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 
 namespace KybInfrastructure.Server
 {
@@ -10,7 +11,29 @@ namespace KybInfrastructure.Server
     public static class ModuleRegister
     {
         /// <summary>
-        /// Middleware that adds a module descriptions to service collections
+        /// Adds service descriptions of the module to service collections given
+        /// </summary>
+        /// <typeparam name="TModuleDescriptor">Module descriptor type</typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddModule<TModuleDescriptor>(this IServiceCollection services)
+            where TModuleDescriptor : class, IModuleDescriptor, new()
+        {
+            try
+            {
+                TModuleDescriptor moduleDescriptor = (TModuleDescriptor)Activator.CreateInstance(typeof(TModuleDescriptor));
+                moduleDescriptor.Describe(services);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"IModuleDescriptor couldn't construct: {ex}");
+            }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds service descriptions of the module to service collections given
         /// </summary>
         /// <typeparam name="TModuleDescriptor">Module descriptor type</typeparam>
         /// <typeparam name="TModuleContext">Module context type</typeparam>
@@ -18,32 +41,21 @@ namespace KybInfrastructure.Server
         /// <param name="context">Context instance of the module that to be used in creation of the module descriptor</param>
         /// <returns></returns>
         public static IServiceCollection AddModule<TModuleDescriptor, TModuleContext>(this IServiceCollection services, TModuleContext context)
-            where TModuleDescriptor : IModuleDescriptor
-            where TModuleContext : IModuleContext
+                where TModuleDescriptor : class, IModuleDescriptor, new()
+                where TModuleContext : IModuleContext
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
+            if (context is null)
+                throw new ArgumentNullException(nameof(context));
 
-            TModuleDescriptor moduleDescriptor = (TModuleDescriptor)Activator.CreateInstance(typeof(TModuleDescriptor), context);
-            moduleDescriptor.Describe(services);
-
-            return services;
-        }
-
-        /// <summary>
-        /// Middleware that adds a module descriptions to service collections
-        /// </summary>
-        /// <typeparam name="TModuleDescriptor">Module descriptor type</typeparam>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddModule<TModuleDescriptor>(this IServiceCollection services)
-            where TModuleDescriptor : IModuleDescriptor
-        {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
-
-            TModuleDescriptor moduleDescriptor = (TModuleDescriptor)Activator.CreateInstance(typeof(TModuleDescriptor));
-            moduleDescriptor.Describe(services);
+            try
+            {
+                TModuleDescriptor moduleDescriptor = (TModuleDescriptor)Activator.CreateInstance(typeof(TModuleDescriptor), context);
+                moduleDescriptor.Describe(services);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"IModuleDescriptor couldn't construct: {ex}");
+            }
 
             return services;
         }
