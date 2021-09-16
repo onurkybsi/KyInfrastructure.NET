@@ -17,7 +17,7 @@ namespace KybInfrastructure.Server
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddModule<TModuleDescriptor>(this IServiceCollection services)
-            where TModuleDescriptor : class, IModuleDescriptor, new()
+            where TModuleDescriptor : class, IModuleDescriptor
         {
             try
             {
@@ -41,7 +41,7 @@ namespace KybInfrastructure.Server
         /// <param name="context">Context instance of the module that to be used in creation of the module descriptor</param>
         /// <returns></returns>
         public static IServiceCollection AddModule<TModuleDescriptor, TModuleContext>(this IServiceCollection services, TModuleContext context)
-                where TModuleDescriptor : class, IModuleDescriptor, new()
+                where TModuleDescriptor : class, IModuleDescriptor
                 where TModuleContext : IModuleContext
         {
             if (context is null)
