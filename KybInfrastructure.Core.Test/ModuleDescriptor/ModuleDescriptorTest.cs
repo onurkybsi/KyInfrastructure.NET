@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -8,40 +7,32 @@ namespace KybInfrastructure.Core.Test
 {
     public class ModuleDescriptorTest
     {
-        private readonly List<ServiceDescriptor> serviceDescriptors;
-        private readonly Mock<IModuleContext> moduleContext;
-
-        private readonly IModuleDescriptor moduleDescriptor;
-
-        public ModuleDescriptorTest()
+        private class FakeModuleDescriptor : ModuleDescriptorBase<IModuleContext>
         {
-            serviceDescriptors = new List<ServiceDescriptor>
-            {
-                ServiceDescriptor.Singleton<IModuleDescriptor, ModuleDescriptorBase<IModuleContext>>(provider =>
-                        new ModuleDescriptorBase<IModuleContext>(new List<ServiceDescriptor>())
-                    )
-            };
-            moduleContext = new Mock<IModuleContext>();
-
-            moduleDescriptor = new ModuleDescriptorBase<IModuleContext>(serviceDescriptors, moduleContext.Object);
+            public FakeModuleDescriptor(List<ServiceDescriptor> serviceDescriptors)
+                : base(serviceDescriptors) { }
+            public FakeModuleDescriptor(List<ServiceDescriptor> serviceDescriptors, IModuleContext context)
+                : base(serviceDescriptors, context) { }
+            public IModuleContext GetContextFromBase() => base.GetContext();
         }
+        private static readonly ServiceDescriptor _fakeServiceDescriptor = ServiceDescriptor.Singleton(typeof(IServiceProvider), typeof(ServiceProvider));
 
         [Fact]
         public void ModuleDescriptorBase_Throws_ArgumentNullException_If_Constructor_ServiceDescriptors_Argument_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => new ModuleDescriptorBase<IModuleContext>(null));
+            Assert.Throws<ArgumentNullException>(() => new FakeModuleDescriptor(null));
         }
 
         [Fact]
-        public void ModuleDescriptorBase_Throws_ArgumentNullException_If_One_Of_ServiceDescriptor_Of_Constructor_ServiceDescriptors_Argument_Is_Null()
+        public void ModuleDescriptorBase_Throws_InvalidArgumentException_If_One_Of_ServiceDescriptor_Of_Constructor_ServiceDescriptors_Argument_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => new ModuleDescriptorBase<IModuleContext>(new List<ServiceDescriptor> { null }));
+            Assert.Throws<InvalidArgumentException>(() => new FakeModuleDescriptor(new List<ServiceDescriptor> { null }));
         }
 
         [Fact]
         public void ModuleDescriptorBase_Throws_ArgumentNullException_If_Constructor_ModuleContext_Argument_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => new ModuleDescriptorBase<IModuleContext>(new List<ServiceDescriptor>(), null));
+            Assert.Throws<ArgumentNullException>(() => new FakeModuleDescriptor(new List<ServiceDescriptor>(), null));
         }
 
         [Fact]
@@ -49,7 +40,7 @@ namespace KybInfrastructure.Core.Test
         {
             int numberOfExpectedDescriptors = 1;
 
-            List<ServiceDescriptor> descriptors = moduleDescriptor.GetDescriptors();
+            List<ServiceDescriptor> descriptors = new FakeModuleDescriptor(new List<ServiceDescriptor> { _fakeServiceDescriptor }).GetDescriptors();
 
             Assert.Equal(numberOfExpectedDescriptors, descriptors.Count);
         }
@@ -57,12 +48,21 @@ namespace KybInfrastructure.Core.Test
         [Fact]
         public void Describe_Adds_All_Descriptors_To_Given_ServiceCollection()
         {
+            IModuleDescriptor moduleDescriptor = new FakeModuleDescriptor(new List<ServiceDescriptor> { _fakeServiceDescriptor });
             int numberOfExpectedAddedDescriptors = moduleDescriptor.GetDescriptors().Count;
             var serviceCollection = new ServiceCollection();
 
             moduleDescriptor.Describe(serviceCollection);
 
             Assert.Equal(numberOfExpectedAddedDescriptors, serviceCollection.Count);
+        }
+        
+        [Fact]
+        public void GetContext_Throws_InvalidOperationException_If_Constructor_ModuleContext_Argument_Is_Null()
+        {
+            FakeModuleDescriptor fakeModuleDescriptor = new FakeModuleDescriptor(new List<ServiceDescriptor>());
+
+            Assert.Throws<InvalidOperationException>(() => fakeModuleDescriptor.GetContextFromBase());
         }
     }
 }

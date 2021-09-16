@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace KybInfrastructure.Core
 {
     /// <summary>
-    /// Provide methods that integrate a module to another modules via a IServiceCollection
+    /// Provides functionality to integrate implementations of one module to another module
     /// </summary>
     public interface IModuleDescriptor
     {

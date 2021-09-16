@@ -11,19 +11,19 @@ namespace KybInfrastructure.Core
     public class ModuleDescriptorBase<TModuleContext> : IModuleDescriptor
         where TModuleContext : IModuleContext
     {
-        protected readonly List<ServiceDescriptor> ServiceDescriptors;
-        protected readonly TModuleContext ModuleContext;
+        private readonly TModuleContext _moduleContext;
+        private readonly List<ServiceDescriptor> _serviceDescriptors;
 
         /// <summary>
         /// IModuleDescriptor base implementation
         /// </summary>
         /// <param name="serviceDescriptors">Module's services descriptors</param>
-        public ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors)
+        protected ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors)
         {
             ValidateServiceDescriptors(serviceDescriptors);
 
-            ServiceDescriptors = serviceDescriptors;
-            ModuleContext = default;
+            _serviceDescriptors = serviceDescriptors;
+            _moduleContext = default;
         }
 
         /// <summary>
@@ -31,13 +31,13 @@ namespace KybInfrastructure.Core
         /// </summary>
         /// <param name="serviceDescriptors">Module's services descriptors</param>
         /// <param name="moduleContext">Module's context</param>
-        public ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors, TModuleContext moduleContext)
+        protected ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors, TModuleContext moduleContext)
         {
             ValidateServiceDescriptors(serviceDescriptors);
             ValidateModuleContext(moduleContext);
 
-            ServiceDescriptors = serviceDescriptors;
-            ModuleContext = moduleContext;
+            _serviceDescriptors = serviceDescriptors;
+            _moduleContext = moduleContext;
         }
 
         private static void ValidateServiceDescriptors(List<ServiceDescriptor> serviceDescriptors)
@@ -45,7 +45,7 @@ namespace KybInfrastructure.Core
             if (serviceDescriptors is null)
                 throw new ArgumentNullException(nameof(serviceDescriptors));
             if (serviceDescriptors.Any(descriptor => descriptor is null))
-                throw new ArgumentNullException("serviceDescriptor");
+                throw new InvalidArgumentException("serviceDescriptor", null);
         }
 
         private static void ValidateModuleContext(TModuleContext moduleContext)
@@ -55,14 +55,26 @@ namespace KybInfrastructure.Core
         }
 
         public List<ServiceDescriptor> GetDescriptors()
-            => ServiceDescriptors;
+            => _serviceDescriptors;
 
         public IServiceCollection Describe(IServiceCollection services)
         {
-            GetDescriptors()?
-                .ForEach(description => services.Add(description));
+            _serviceDescriptors
+                .ForEach(descriptor => services.Add(descriptor));
 
             return services;
+        }
+
+        /// <summary>
+        /// Returns context of the module
+        /// </summary>
+        /// <returns>Module context</returns>
+        protected TModuleContext GetContext()
+        {
+            if (_moduleContext is null)
+                throw new InvalidOperationException("moduleContext is null");
+            else
+                return _moduleContext;
         }
     }
 }
