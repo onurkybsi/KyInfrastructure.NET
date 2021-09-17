@@ -20,9 +20,19 @@ namespace KybInfrastructure.Server
         /// <param name="context">Current HttpContext</param>
         public static void Build(HttpContext context)
         {
+            ValidateHttpContext(context);
+
             beforeBuildAction?.Invoke();
             Current = new ServiceHelper(context);
             afterBuildAction?.Invoke();
+        }
+
+        private static void ValidateHttpContext(HttpContext context)
+        {
+            if (context is null)
+                throw new ArgumentNullException(nameof(HttpContext));
+            if (context.RequestServices is null)
+                throw new ArgumentNullException(nameof(context.RequestServices));
         }
 
         private static Action beforeBuildAction;
@@ -31,7 +41,12 @@ namespace KybInfrastructure.Server
         /// </summary>
         /// <param name="action">Before building action</param>
         public static void SetBeforeBuildAction(Action action)
-            => beforeBuildAction = action;
+        {
+            if (action is default(Action))
+                throw new ArgumentNullException(nameof(action));
+
+            beforeBuildAction = action;
+        }
 
         private static Action afterBuildAction;
         /// <summary>
@@ -39,8 +54,12 @@ namespace KybInfrastructure.Server
         /// </summary>
         /// <param name="action">After building action</param>
         public static void SetAfterBuildAction(Action action)
-            => afterBuildAction = action;
+        {
+            if (action is default(Action))
+                throw new ArgumentNullException(nameof(action));
 
+            afterBuildAction = action;
+        }
 
         private readonly HttpContext _httpContext;
 
@@ -55,6 +74,7 @@ namespace KybInfrastructure.Server
         /// <typeparam name="T">Type of service</typeparam>
         /// <returns></returns>
         public T GetService<T>()
-            => _httpContext.RequestServices.GetRequiredService<T>();
+            where T : class
+            => _httpContext?.RequestServices?.GetRequiredService<T>();
     }
 }
