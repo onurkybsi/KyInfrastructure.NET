@@ -1,5 +1,6 @@
 ﻿using KybInfrastructure.Core;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -17,6 +18,15 @@ namespace KybInfrastructure.Server.Test
                 })
             { }
 
+            public FakeModuleDescriptor(IModuleContext moduleContext)
+                : base(new List<ServiceDescriptor>
+                {
+                    ServiceDescriptor.Singleton(typeof(IServiceCollection), typeof(ServiceCollection))
+                })
+            {
+                throw new Exception("Fake exception");
+            }
+
             public IServiceCollection Describe(IServiceCollection services)
                 => throw new NotImplementedException();
 
@@ -33,6 +43,16 @@ namespace KybInfrastructure.Server.Test
         }
 
         [Fact]
+        public void AddModule_Adds_Descriptor_To_ServiceCollection()
+        {
+            ServiceCollection serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddModule<FakeModuleDescriptor>();
+
+            Assert.Contains(serviceCollection, service => service.ImplementationType == typeof(ServiceCollection));
+        }
+
+        [Fact]
         public void AddModule_Adds_All_Descriptors_To_ServiceCollection()
         {
             int allDescriptorsCount = 1;
@@ -41,6 +61,16 @@ namespace KybInfrastructure.Server.Test
             serviceCollection.AddModule<FakeModuleDescriptor>();
 
             Assert.Equal(allDescriptorsCount, serviceCollection.Count);
+        }
+
+        [Fact]
+        public void AddModule_Throws_InvalidOperationException_If_Module_Couldnt_Construct()
+        {
+            ServiceCollection serviceCollection = new ServiceCollection();
+            Mock<IModuleContext> fakeContext = new Mock<IModuleContext>();
+
+            Assert.Throws<InvalidOperationException>(() => 
+                serviceCollection.AddModule<FakeModuleDescriptor, IModuleContext>(fakeContext.Object));
         }
     }
 }
