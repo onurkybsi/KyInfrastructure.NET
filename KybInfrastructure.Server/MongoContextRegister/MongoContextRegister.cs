@@ -2,7 +2,6 @@
 using KybInfrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using System;
 
 namespace KybInfrastructure.Server
 {
@@ -20,17 +19,13 @@ namespace KybInfrastructure.Server
         /// <returns></returns>
         public static IServiceCollection AddMongoContext(this IServiceCollection services, string mongoDbConnectionString, string databaseName)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
-            if (string.IsNullOrWhiteSpace(mongoDbConnectionString))
-                throw new InvalidArgumentException(nameof(services), mongoDbConnectionString);
+            ValidateMongoContextConfigurationValues(mongoDbConnectionString, databaseName);
 
             services.AddSingleton<IMongoClient>((serviceProvider) =>
             {
                 MongoClientSettings settings = MongoClientSettings.FromConnectionString(mongoDbConnectionString);
                 return new MongoClient(settings);
             });
-
             services.AddScoped((serviceProvider) =>
             {
                 IMongoClient client = serviceProvider.GetRequiredService<IMongoClient>();
@@ -38,6 +33,14 @@ namespace KybInfrastructure.Server
             });
 
             return services;
+        }
+
+        private static void ValidateMongoContextConfigurationValues(string mongoDbConnectionString, string databaseName)
+        {
+            if (string.IsNullOrWhiteSpace(mongoDbConnectionString))
+                throw new InvalidArgumentException(nameof(mongoDbConnectionString), mongoDbConnectionString);
+            if (string.IsNullOrWhiteSpace(databaseName))
+                throw new InvalidArgumentException(nameof(databaseName), databaseName);
         }
     }
 }
