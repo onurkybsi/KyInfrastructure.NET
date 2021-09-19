@@ -10,7 +10,7 @@ namespace KybInfrastructure.Server
     public static class UnitOfWorkRegister
     {
         /// <summary>
-        /// Set UnitOfWork objects lifetime in the service collection
+        /// Set UnitOfWork objects lifetime
         /// </summary>
         /// <typeparam name="TDatabaseContext">Database context used by UnitOfWork</typeparam>
         /// <typeparam name="TIUnitOfWork">UnitOfWork interface</typeparam>
@@ -29,7 +29,7 @@ namespace KybInfrastructure.Server
         }
 
         /// <summary>
-        /// Set Entity Framework UnitOfWork objects lifetime in the service collection
+        /// Set UnitOfWork objects lifetime which has DbContext as database context
         /// </summary>
         /// <typeparam name="TDatabaseContext">Database context used by Entity Framework UnitOfWork</typeparam>
         /// <typeparam name="TIUnitOfWork">UnitOfWork interface</typeparam>
