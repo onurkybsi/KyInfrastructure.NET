@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace KybInfrastructure.Data
@@ -23,11 +25,16 @@ namespace KybInfrastructure.Data
         /// Rollbacks changes without saving
         /// </summary>
         public static void Rollback(this DbContext context)
-        {
-            var changedEntries = context.ChangeTracker
-                .Entries()
-                .Where(x => x.State != EntityState.Unchanged).ToList();
+            => RollbackEntryStates(GetChangedEntriesInDbContext(context));
 
+        private static List<EntityEntry> GetChangedEntriesInDbContext(DbContext context)
+            => context.ChangeTracker
+                .Entries()
+                .Where(x => x.State != EntityState.Unchanged)
+                .ToList();
+
+        private static void RollbackEntryStates(List<EntityEntry> changedEntries)
+        {
             foreach (var entry in changedEntries)
             {
                 switch (entry.State)
