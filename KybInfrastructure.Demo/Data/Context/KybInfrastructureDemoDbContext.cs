@@ -1,10 +1,9 @@
 ﻿using KybInfrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace KybInfrastructure.Demo.Data
 {
-    public partial class KybInfrastructureDemoDbContext : EfContext<KybInfrastructureDemoDbContext>, IDatabaseContext
+    public partial class KybInfrastructureDemoDbContext : DbContext, IDatabaseContext
     {
         public KybInfrastructureDemoDbContext() { }
 
@@ -31,5 +30,11 @@ namespace KybInfrastructure.Demo.Data
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public bool AreThereAnyChanges()
+            => ((DbContext)this).AreThereAnyChanges();
+
+        public void Rollback()
+            => ((DbContext)this).Rollback();
     }
 }

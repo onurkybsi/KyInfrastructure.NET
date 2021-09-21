@@ -4,33 +4,27 @@ using System.Linq;
 namespace KybInfrastructure.Data
 {
     /// <summary>
-    /// Default IDatabaseContext entity framework implementation
+    /// Contains extension methods of DbContext
     /// </summary>
-    /// <typeparam name="TDbContext"></typeparam>
-    public class EfContext<TDbContext> : DbContext, IDatabaseContext
-        where TDbContext : DbContext
+    public static class DbContextExtensions
     {
         /// <summary>
-        /// Default IDatabaseContext entity framework implementation
+        /// Returns whether changes exists or not in database
         /// </summary>
-        protected EfContext() { }
-
-        /// <summary>
-        /// Default IDatabaseContext entity framework implementation
-        /// </summary>
-        /// <param name="options">DbContext options</param>
-        protected EfContext(DbContextOptions<TDbContext> options) : base(options) { }
-
-        public bool AreThereAnyChanges()
-            => this.ChangeTracker
+        /// <returns>Changes exists or not</returns>
+        public static bool AreThereAnyChanges(this DbContext context)
+            => context.ChangeTracker
                 .Entries()
                 .Any(x => x.State == EntityState.Modified ||
                           x.State == EntityState.Added ||
                           x.State == EntityState.Deleted);
 
-        public void Rollback()
+        /// <summary>
+        /// Rollbacks changes without saving
+        /// </summary>
+        public static void Rollback(this DbContext context)
         {
-            var changedEntries = this.ChangeTracker
+            var changedEntries = context.ChangeTracker
                 .Entries()
                 .Where(x => x.State != EntityState.Unchanged).ToList();
 
