@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using KybInfrastructure.Core;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +14,7 @@ namespace KybInfrastructure.Data
 
         private readonly IMongoDatabase _databaseAccessor;
 
-        private readonly List<Action<IMongoDatabase>> _changeOperations = new List<Action<IMongoDatabase>>();
+        private readonly List<Action<IMongoDatabase>> _changeOperations = new();
 
         /// <summary>
         /// Default IMongoContext implementation
@@ -21,6 +22,9 @@ namespace KybInfrastructure.Data
         /// <param name="databaseAccessor">IMongoDatabase object that provide access to database</param>
         public MongoContext(IMongoDatabase databaseAccessor)
         {
+            if (databaseAccessor is null)
+                throw new ArgumentNullException(nameof(databaseAccessor));
+
             _databaseAccessor = databaseAccessor;
         }
 
@@ -31,7 +35,11 @@ namespace KybInfrastructure.Data
         /// <param name="collectionName">The name of the collection to be accessed</param>
         /// <returns></returns>
         public IMongoCollection<TEntity> GetCollection<TEntity>(string collectionName)
-            => _databaseAccessor.GetCollection<TEntity>(collectionName);
+        {
+            if (string.IsNullOrWhiteSpace(collectionName))
+                throw new InvalidArgumentException(nameof(collectionName), collectionName);
+            return _databaseAccessor.GetCollection<TEntity>(collectionName);
+        }
 
         public void AddOperation(Action<IMongoDatabase> operation)
         {
@@ -46,7 +54,13 @@ namespace KybInfrastructure.Data
             => _thereAreChanges;
 
         public void Rollback()
-            => _changeOperations.Clear();
+            => ResetContext();
+
+        private void ResetContext()
+        {
+            _changeOperations.Clear();
+            _thereAreChanges = false;
+        }
 
         public int SaveChanges()
         {
@@ -55,7 +69,7 @@ namespace KybInfrastructure.Data
             {
                 operation.Invoke(_databaseAccessor);
             }
-            _changeOperations.Clear();
+            ResetContext();
 
             return changedEntry;
         }
