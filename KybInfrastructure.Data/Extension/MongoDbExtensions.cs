@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Linq;
 
 namespace KybInfrastructure.Data
@@ -10,7 +11,7 @@ namespace KybInfrastructure.Data
     public static class MongoDbExtensions
     {
         /// <summary>
-        /// Creates a collection by given parameters if not exists
+        /// Creates a collection by given parameters if not exist
         /// </summary>
         /// <typeparam name="TEntity">Entity type of collection</typeparam>
         /// <param name="mongoDatabase">IMongoDatabase instance</param>
@@ -19,25 +20,35 @@ namespace KybInfrastructure.Data
         /// <returns></returns>
         public static IMongoCollection<TEntity> CreateCollectionIfNotExists<TEntity>(this IMongoDatabase mongoDatabase, string collectionName, CreateCollectionOptions createCollectionOptions)
         {
-            bool collectionIsExists = mongoDatabase.ListCollectionNames(new ListCollectionNamesOptions { Filter = new BsonDocument("name", collectionName) }).Any();
+            ValidateCollectionName(collectionName);
+            ValidateCreateCollectionOptions(createCollectionOptions);
 
-            if (!collectionIsExists)
-            {
-                if (createCollectionOptions != null)
-                {
-                    mongoDatabase.CreateCollection(collectionName, createCollectionOptions);
-                }
-                else
-                {
-                    mongoDatabase.CreateCollection(collectionName);
-                }
-            }
+            if (!CheckCollectionExistsInDatabase(mongoDatabase, collectionName))
+                mongoDatabase.CreateCollection(collectionName, createCollectionOptions);
 
             return mongoDatabase.GetCollection<TEntity>(collectionName);
         }
 
+        private static bool CheckCollectionExistsInDatabase(IMongoDatabase mongoDatabase, string collectionName)
+            => mongoDatabase.ListCollectionNames(new ListCollectionNamesOptions
+            {
+                Filter = new BsonDocument("name", collectionName)
+            }).Any();
+
+        private static void ValidateCollectionName(string collectionName)
+        {
+            if (string.IsNullOrWhiteSpace(collectionName))
+                throw new ArgumentNullException(nameof(collectionName));
+        }
+
+        private static void ValidateCreateCollectionOptions(CreateCollectionOptions createCollectionOptions)
+        {
+            if (createCollectionOptions is null)
+                throw new ArgumentNullException(nameof(createCollectionOptions));
+        }
+
         /// <summary>
-        /// Creates a collection by given parameters if not exists
+        /// Creates a collection by given parameters if not exist
         /// </summary>
         /// <typeparam name="TEntity">Entity type of collection</typeparam>
         /// <param name="mongoDatabase">IMongoDatabase instance</param>
@@ -45,9 +56,9 @@ namespace KybInfrastructure.Data
         /// <returns></returns>
         public static IMongoCollection<TEntity> CreateCollectionIfNotExists<TEntity>(this IMongoDatabase mongoDatabase, string collectionName)
         {
-            bool collectionIsExists = mongoDatabase.ListCollectionNames(new ListCollectionNamesOptions { Filter = new BsonDocument("name", collectionName) }).Any();
+            ValidateCollectionName(collectionName);
 
-            if (!collectionIsExists)
+            if (!CheckCollectionExistsInDatabase(mongoDatabase, collectionName))
                 mongoDatabase.CreateCollection(collectionName);
 
             return mongoDatabase.GetCollection<TEntity>(collectionName);
@@ -62,11 +73,27 @@ namespace KybInfrastructure.Data
         /// <returns></returns>
         public static IMongoCollection<TEntity> CreateUniqueIndex<TEntity>(this IMongoCollection<TEntity> mongoCollection, string fieldName)
         {
-            var indexOptions = new CreateIndexOptions { Name = $"UniqueIX_{fieldName}", Unique = true, Sparse = true };
-            var model = new CreateIndexModel<TEntity>(new BsonDocument(fieldName, 1), indexOptions);
-            mongoCollection.Indexes.CreateOne(model);
+            ValidateFieldName(fieldName);
+
+            CreateIndexOptions indexOptions = BuildCreateIndexOptionsForUniqueIndex(fieldName);
+
+            mongoCollection.Indexes.CreateOne(new CreateIndexModel<TEntity>(new BsonDocument(fieldName, 1), indexOptions));
 
             return mongoCollection;
         }
+
+        private static void ValidateFieldName(string fieldName)
+        {
+            if (string.IsNullOrWhiteSpace(fieldName))
+                throw new ArgumentNullException(nameof(fieldName));
+        }
+
+        private static CreateIndexOptions BuildCreateIndexOptionsForUniqueIndex(string fieldName)
+            => new()
+            {
+                Name = $"UniqueIX_{fieldName}",
+                Unique = true,
+                Sparse = true
+            };
     }
 }
