@@ -18,7 +18,8 @@ namespace KybInfrastructure.Data
         /// <param name="collectionName">Name of collection</param>
         /// <param name="createCollectionOptions">Creation options of the collection</param>
         /// <returns></returns>
-        public static IMongoCollection<TEntity> CreateCollectionIfNotExists<TEntity>(this IMongoDatabase mongoDatabase, string collectionName, CreateCollectionOptions createCollectionOptions)
+        public static IMongoCollection<TEntity> CreateCollectionIfNotExist<TEntity>(this IMongoDatabase mongoDatabase, string collectionName,
+            CreateCollectionOptions createCollectionOptions) where TEntity : class, new()
         {
             ValidateCollectionName(collectionName);
             ValidateCreateCollectionOptions(createCollectionOptions);
@@ -33,7 +34,7 @@ namespace KybInfrastructure.Data
             => mongoDatabase.ListCollectionNames(new ListCollectionNamesOptions
             {
                 Filter = new BsonDocument("name", collectionName)
-            }).Any();
+            })?.Any() ?? false;
 
         private static void ValidateCollectionName(string collectionName)
         {
@@ -54,7 +55,8 @@ namespace KybInfrastructure.Data
         /// <param name="mongoDatabase">IMongoDatabase instance</param>
         /// <param name="collectionName">Name of collection</param>
         /// <returns></returns>
-        public static IMongoCollection<TEntity> CreateCollectionIfNotExists<TEntity>(this IMongoDatabase mongoDatabase, string collectionName)
+        public static IMongoCollection<TEntity> CreateCollectionIfNotExist<TEntity>(this IMongoDatabase mongoDatabase, string collectionName)
+            where TEntity : class, new()
         {
             ValidateCollectionName(collectionName);
 
@@ -72,6 +74,7 @@ namespace KybInfrastructure.Data
         /// <param name="fieldName">Name of field</param>
         /// <returns></returns>
         public static IMongoCollection<TEntity> CreateUniqueIndex<TEntity>(this IMongoCollection<TEntity> mongoCollection, string fieldName)
+            where TEntity : class, new()
         {
             ValidateFieldName(fieldName);
 
