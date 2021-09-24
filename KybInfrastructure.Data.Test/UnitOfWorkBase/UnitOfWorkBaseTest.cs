@@ -5,6 +5,20 @@ namespace KybInfrastructure.Data.Test
 {
     public class UnitOfWorkBaseTest
     {
+        public class FakeDatabaseContext : IDatabaseContext
+        {
+            public bool AreThereAnyChanges()
+                => throw new System.NotImplementedException();
+
+            public virtual void Dispose() { }
+
+            public void Rollback()
+                => throw new System.NotImplementedException();
+
+            public int SaveChanges()
+                => throw new System.NotImplementedException();
+        }
+
         private readonly Mock<FakeDatabaseContext> fakeDatabaseContext;
         private readonly Mock<UnitOfWorkBase<FakeDatabaseContext>> fakeUnitOfWork;
 
