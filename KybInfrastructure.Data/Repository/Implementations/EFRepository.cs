@@ -10,7 +10,7 @@ namespace KybInfrastructure.Data
     /// Base implementation for EF repositories
     /// </summary>
     public class EFRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class
+        where TEntity : class, new()
     {
         protected readonly DbSet<TEntity> DbSet;
 
@@ -26,18 +26,41 @@ namespace KybInfrastructure.Data
         }
 
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
-            => DbSet.Where(filter).FirstOrDefault();
+            => FilterDbSetByFilter(filter).FirstOrDefault();
+
+        private IQueryable<TEntity> FilterDbSetByFilter(Expression<Func<TEntity, bool>> filter)
+        {
+            if (filter is null)
+                throw new ArgumentNullException(nameof(filter));
+            return DbSet
+                    .Where(filter);
+        }
 
         public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> filter)
-            => DbSet.Where(filter).ToList();
+            => FilterDbSetByFilter(filter).ToList();
 
         public void Add(TEntity entity)
-            => DbSet.Add(entity);
+        {
+            ValidateEntity(entity);
+            DbSet.Add(entity);
+        }
+
+        private static void ValidateEntity(TEntity entity)
+        {
+            if (entity is null)
+                throw new ArgumentNullException(nameof(entity));
+        }
 
         public void Update(TEntity entity)
-            => DbSet.Update(entity);
+        {
+            ValidateEntity(entity);
+            DbSet.Update(entity);
+        }
 
         public void Remove(TEntity entity)
-            => DbSet.Remove(entity);
+        {
+            ValidateEntity(entity);
+            DbSet.Remove(entity);
+        }
     }
 }
