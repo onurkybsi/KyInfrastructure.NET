@@ -21,13 +21,13 @@ namespace KybInfrastructure.Server.Test
         [Fact]
         public void Build_Throws_ArgumentNullException_If_HttpContext_Argument_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => ServiceHelper.Build(null));
+            Assert.Throws<ArgumentNullException>(() => ServiceLocator.Build(null));
         }
 
         [Fact]
         public void Build_Throws_ArgumentNullException_If_HttpContext_RequestServices_Argument_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => ServiceHelper.Build(new Mock<HttpContext>().Object));
+            Assert.Throws<ArgumentNullException>(() => ServiceLocator.Build(new Mock<HttpContext>().Object));
         }
 
         [Fact]
@@ -35,9 +35,9 @@ namespace KybInfrastructure.Server.Test
         {
             Mock<HttpContext> fakeHttpContext = CreateMockHttpContext();
 
-            ServiceHelper.Build(fakeHttpContext.Object);
+            ServiceLocator.Build(fakeHttpContext.Object);
 
-            Assert.NotNull(ServiceHelper.Current);
+            Assert.NotNull(ServiceLocator.Current);
         }
 
         [Fact]
@@ -46,9 +46,9 @@ namespace KybInfrastructure.Server.Test
             Mock<HttpContext> fakeHttpContext = CreateMockHttpContext();
             bool beforeBuildActionInvoked = false;
             Action beforeBuildAction = () => { if (!beforeBuildActionInvoked) beforeBuildActionInvoked = true; };
-            ServiceHelper.SetBeforeBuildAction(beforeBuildAction);
+            ServiceLocator.SetBeforeBuildAction(beforeBuildAction);
 
-            ServiceHelper.Build(fakeHttpContext.Object);
+            ServiceLocator.Build(fakeHttpContext.Object);
 
             Assert.True(beforeBuildActionInvoked);
         }
@@ -58,7 +58,7 @@ namespace KybInfrastructure.Server.Test
         {
             Mock<HttpContext> fakeHttpContext = CreateMockHttpContext();
 
-            var exception = Record.Exception(() => ServiceHelper.Build(fakeHttpContext.Object));
+            var exception = Record.Exception(() => ServiceLocator.Build(fakeHttpContext.Object));
 
             Assert.Null(exception);
         }
@@ -69,9 +69,9 @@ namespace KybInfrastructure.Server.Test
             Mock<HttpContext> fakeHttpContext = CreateMockHttpContext();
             bool afterBuildActionInvoked = false;
             Action afterBuildAction = () => { if (!afterBuildActionInvoked) afterBuildActionInvoked = true; };
-            ServiceHelper.SetAfterBuildAction(afterBuildAction);
+            ServiceLocator.SetAfterBuildAction(afterBuildAction);
 
-            ServiceHelper.Build(fakeHttpContext.Object);
+            ServiceLocator.Build(fakeHttpContext.Object);
 
             Assert.True(afterBuildActionInvoked);
         }
@@ -81,7 +81,7 @@ namespace KybInfrastructure.Server.Test
         {
             Mock<HttpContext> fakeHttpContext = CreateMockHttpContext();
 
-            var exception = Record.Exception(() => ServiceHelper.Build(fakeHttpContext.Object));
+            var exception = Record.Exception(() => ServiceLocator.Build(fakeHttpContext.Object));
 
             Assert.Null(exception);
         }
@@ -90,18 +90,18 @@ namespace KybInfrastructure.Server.Test
         public void SetBeforeBuildAction_Throws_ArgumentNullException_If_Action_Argument_Is_Null()
         {
             Mock<HttpContext> mockContext = CreateMockHttpContext();
-            ServiceHelper.Build(mockContext.Object);
+            ServiceLocator.Build(mockContext.Object);
 
-            Assert.Throws<ArgumentNullException>(() => ServiceHelper.SetBeforeBuildAction(null));
+            Assert.Throws<ArgumentNullException>(() => ServiceLocator.SetBeforeBuildAction(null));
         }
 
         [Fact]
         public void SetAfterBuildAction_Throws_ArgumentNullException_If_Action_Argument_Is_Null()
         {
             Mock<HttpContext> mockContext = CreateMockHttpContext();
-            ServiceHelper.Build(mockContext.Object);
+            ServiceLocator.Build(mockContext.Object);
 
-            Assert.Throws<ArgumentNullException>(() => ServiceHelper.SetAfterBuildAction(null));
+            Assert.Throws<ArgumentNullException>(() => ServiceLocator.SetAfterBuildAction(null));
         }
 
         [Fact]
@@ -114,9 +114,9 @@ namespace KybInfrastructure.Server.Test
             fakeHttpContext.Setup(ctx => ctx.RequestServices)
                 .Returns(serviceProvider);
 
-            ServiceHelper.Build(fakeHttpContext.Object);
+            ServiceLocator.Build(fakeHttpContext.Object);
 
-            Assert.Equal(fakeService, ServiceHelper.Current.GetService<FakeService>());
+            Assert.Equal(fakeService, ServiceLocator.Current.GetService<FakeService>());
         }
     }
 }

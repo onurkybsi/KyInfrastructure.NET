@@ -16,9 +16,8 @@ namespace KybInfrastructure.Demo.Data
                 new ServiceDescriptor(typeof(MongoContext), (serviceProvider) => new MongoContext(serviceProvider.GetRequiredService<IMongoClient>().GetDatabase("KybInfrastructureDemoDb")),
                     ServiceLifetime.Scoped),
                 ServiceDescriptor.Scoped<IUserRepository, UserRepository>(),
-                new ServiceDescriptor(typeof(KybInfrastructureDemoDbContext), (serviceProvider) => new KybInfrastructureDemoDbContext(),
-                    ServiceLifetime.Scoped),
-                ServiceDescriptor.Scoped<IUnitOfWork, UnitOfWork>()
+                new ServiceDescriptor(typeof(IUnitOfWork), (serviceProvider) => new UnitOfWork(new KybInfrastructureDemoDbContext()),
+                    ServiceLifetime.Scoped)
             }, context)
         { }
     }

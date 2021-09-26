@@ -17,7 +17,7 @@ namespace KybInfrastructure.Server.Test
 
             app.Invoke(CreateHttpContext());
 
-            Assert.NotNull(ServiceHelper.Current);
+            Assert.NotNull(ServiceLocator.Current);
         }
 
         private static IApplicationBuilder CreateApplicationBuilder()

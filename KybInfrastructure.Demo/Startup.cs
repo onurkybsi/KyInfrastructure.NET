@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 
@@ -25,6 +26,7 @@ namespace KybInfrastructure.Demo
                 MongoDbConnectionString = "mongodb://localhost:27017"
             });
             services.AddModule<Business.ModuleDescriptor, Business.ModuleContext>(new Business.ModuleContext());
+            services.AddServiceLocator();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -42,7 +44,7 @@ namespace KybInfrastructure.Demo
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IServiceProvider sp)
         {
             if (env.IsDevelopment())
             {
@@ -50,7 +52,7 @@ namespace KybInfrastructure.Demo
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KybInfrastructure.Demo v1"));
             }
-            app.UseServiceHelper();
+            
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
