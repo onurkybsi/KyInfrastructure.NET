@@ -52,7 +52,6 @@ namespace KybInfrastructure.Demo
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KybInfrastructure.Demo v1"));
             }
-            
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

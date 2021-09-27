@@ -24,8 +24,9 @@ namespace KybInfrastructure.Demo.Client
             Console.WriteLine("Hello World!");
 
             Stopwatch stopwatch = new Stopwatch();
-            //ExecuteRequest(1000, stopwatch);
-            ExecuteRequestParallel(1000, stopwatch);
+            ExecuteRequest(10000, stopwatch);
+            Console.WriteLine("Sync part completed!");
+            ExecuteRequestParallel(10000, stopwatch);
             Console.WriteLine($"All requests completed in: {stopwatch.ElapsedMilliseconds}ms");
         }
 
@@ -49,7 +50,7 @@ namespace KybInfrastructure.Demo.Client
                 Task task = new((ix) =>
                 {
                     List<Product> products = SendGetRequest<List<Product>>("http://localhost:5000/product/getallproducts", (int)ix);
-                    Console.WriteLine($"{i}. response: {JsonConvert.SerializeObject(products)}");
+                    Console.WriteLine($"{ix}. response: {JsonConvert.SerializeObject(products)}");
                 }, i);
                 tasks.Add(task);
                 task.Start();
