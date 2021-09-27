@@ -28,23 +28,9 @@ namespace KybInfrastructure.Demo
             services.AddModule<Business.ModuleDescriptor, Business.ModuleContext>(new Business.ModuleContext());
             services.AddServiceLocator();
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "KybInfrastructure.Demo",
-                    Description = "A simple example of using KybInfrastructure",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Onur Kayabasi",
-                        Url = new Uri("https://github.com/onurkybsi"),
-                    }
-                });
-            });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IServiceProvider sp)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
