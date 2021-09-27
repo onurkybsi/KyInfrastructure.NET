@@ -22,5 +22,12 @@ namespace KybInfrastructure.Demo.Controllers
         [HttpGet]
         public List<User> GetAdminUsers()
             => _userService.GetAdminUsers();
+
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] User user)
+        {
+            _userService.AddUser(user);
+            return Ok();
+        }
     }
 }
