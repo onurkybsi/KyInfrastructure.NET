@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Onur Kayabasi</Authors>
+    <Company>Onur Kayabasi</Company>
+    <Description>It includes the core functionality of the KybInfrastructure framework developed for application development in .NET environment.</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/onurkybsi/KybInfrastructure/tree/master/KybInfrastructure.Core</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>.NET Stardart, .NET Core, ASP.NET Core, Infrastructure, Dependency Injection, Core</PackageTags>
+    <Product>KybInfrastructure</Product>
   </PropertyGroup>
 
   <ItemGroup>

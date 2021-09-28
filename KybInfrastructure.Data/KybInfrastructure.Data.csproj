@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Onur Kayabasi</Authors>
+    <Company>Onur Kayabasi</Company>
+    <Product>KybInfrastructure</Product>
+    <Description>It includes the data access layer functionality of the KybInfrastructure framework developed for application development in .NET environments.</Description>
+    <RepositoryUrl>https://github.com/onurkybsi/KybInfrastructure/tree/master/KybInfrastructure.Data</RepositoryUrl>
+    <PackageTags>.NET Stardart, .NET Core, ASP.NET Core, Infrastructure, SQL, Entity Framework, MongoDb, Data Access</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

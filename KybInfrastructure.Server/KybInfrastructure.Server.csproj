@@ -1,17 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Onur Kayabasi</Authors>
+    <Company>Onur Kayabasi</Company>
+    <Product>KybInfrastructure</Product>
+    <Description>It includes the API layer functionality of the KybInfrastructure framework developed for application development in .NET environments.</Description>
+    <RepositoryUrl>https://github.com/onurkybsi/KybInfrastructure</RepositoryUrl>
+    <PackageTags>.NET Stardart, .NET Core, ASP.NET Core, Infrastructure</PackageTags>
+    <PackageProjectUrl>https://github.com/onurkybsi/KybInfrastructure</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KybInfrastructure.Core\KybInfrastructure.Core.csproj" />
     <ProjectReference Include="..\KybInfrastructure.Data\KybInfrastructure.Data.csproj" />
   </ItemGroup>
 

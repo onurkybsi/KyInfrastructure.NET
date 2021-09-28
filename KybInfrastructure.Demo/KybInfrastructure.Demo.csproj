@@ -6,17 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="KybInfrastructure.Server" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\KybInfrastructure.Core\KybInfrastructure.Core.csproj" />
-    <ProjectReference Include="..\KybInfrastructure.Data\KybInfrastructure.Data.csproj" />
-    <ProjectReference Include="..\KybInfrastructure.Server\KybInfrastructure.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>

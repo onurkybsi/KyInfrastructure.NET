@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Demo", "K
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{42DC1307-90D7-4BFA-A8B4-19748E994F87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KybInfrastructure.Demo.Client", "KybInfrastructure.Demo.Client\KybInfrastructure.Demo.Client.csproj", "{3197E4AF-2151-4BAF-9E4C-DB8D3C9EF553}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KybInfrastructure.Demo.Client", "KybInfrastructure.Demo.Client\KybInfrastructure.Demo.Client.csproj", "{3197E4AF-2151-4BAF-9E4C-DB8D3C9EF553}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KybInfrastructure", "KybInfrastructure\KybInfrastructure.csproj", "{A448B290-7A17-4D0C-9088-7198BFABB380}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{3197E4AF-2151-4BAF-9E4C-DB8D3C9EF553}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3197E4AF-2151-4BAF-9E4C-DB8D3C9EF553}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3197E4AF-2151-4BAF-9E4C-DB8D3C9EF553}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A448B290-7A17-4D0C-9088-7198BFABB380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A448B290-7A17-4D0C-9088-7198BFABB380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A448B290-7A17-4D0C-9088-7198BFABB380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A448B290-7A17-4D0C-9088-7198BFABB380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{F23B6F5A-613C-4075-95B9-62060F77839F} = {838D8240-1CFD-4EE7-8154-64DA60740096}
 		{4520BFCF-E7F4-48A3-AEDD-58A5F3FCDE90} = {42DC1307-90D7-4BFA-A8B4-19748E994F87}
 		{3197E4AF-2151-4BAF-9E4C-DB8D3C9EF553} = {42DC1307-90D7-4BFA-A8B4-19748E994F87}
+		{A448B290-7A17-4D0C-9088-7198BFABB380} = {30F6A5AF-84B1-4310-A9B6-53B361210BE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44FB19BD-406C-4DAB-9374-7F0B1BC0656F}

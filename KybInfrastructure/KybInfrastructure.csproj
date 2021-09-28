@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Onur Kayabasi</Authors>
+    <Company>Onur Kayabasi</Company>
+    <Description>It provides various infrastructural functionality to applications developed for .NET environments.</Description>
+    <RepositoryUrl>https://github.com/onurkybsi/KybInfrastructure</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/onurkybsi/KybInfrastructure</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KybInfrastructure.Server\KybInfrastructure.Server.csproj" />
+  </ItemGroup>
+
+</Project>
