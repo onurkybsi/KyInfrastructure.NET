@@ -9,6 +9,8 @@
     <RepositoryUrl>https://github.com/onurkybsi/KybInfrastructure</RepositoryUrl>
     <PackageTags>.NET Stardart, .NET Core, ASP.NET Core, Infrastructure</PackageTags>
     <PackageProjectUrl>https://github.com/onurkybsi/KybInfrastructure</PackageProjectUrl>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>ServiceLocator implementation changed</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
