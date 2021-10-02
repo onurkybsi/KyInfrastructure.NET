@@ -14,18 +14,19 @@ namespace KybInfrastructure.Demo.Client
         {
             Console.WriteLine("Hello World!");
 
-            //Console.WriteLine($"GetAllProducts");
-            //Console.WriteLine($"-----------------------------------------------------------------------------------------------");
-            //long syncPartElapsedTimeInMs = ExecuteGetRequest(10000, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
-            //Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
-            //long asyncPartElapsedTimeInMs = ExecuteGetRequestParallel(10000, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
-            //Console.WriteLine($"Async part completed in {asyncPartElapsedTimeInMs}");
-            //Console.WriteLine($"All requests completed in: {syncPartElapsedTimeInMs + asyncPartElapsedTimeInMs}ms");
-            Console.WriteLine($"CreateUser");
+            Console.WriteLine($"GetAllProducts");
             Console.WriteLine($"-----------------------------------------------------------------------------------------------");
-            long syncPartElapsedTimeInMs = ExecutePostRequest(10000, "http://localhost:5000/user/createuser").ElapsedMilliseconds;
-            Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
-            //long asyncPartElapsedTimeInMs = ExecutePostRequestParallel(10000, "http://localhost:5000/user/createuser").ElapsedMilliseconds;
+            //long syncPartElapsedTimeInMs = ExecuteGetRequest(10, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
+            //Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
+            long asyncPartElapsedTimeInMs = ExecuteGetRequestParallel(10, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
+            Console.WriteLine($"Async part completed in {asyncPartElapsedTimeInMs}");
+            //Console.WriteLine($"All requests completed in: {syncPartElapsedTimeInMs + asyncPartElapsedTimeInMs}ms");
+
+            //Console.WriteLine($"CreateUser");
+            //Console.WriteLine($"-----------------------------------------------------------------------------------------------");
+            //long syncPartElapsedTimeInMs = ExecutePostRequest(10000, "http://localhost:5000/user/createuser").ElapsedMilliseconds;
+            //Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
+            ////long asyncPartElapsedTimeInMs = ExecutePostRequestParallel(10000, "http://localhost:5000/user/createuser").ElapsedMilliseconds;
             //Console.WriteLine($"Async part completed in {asyncPartElapsedTimeInMs}ms");
         }
 

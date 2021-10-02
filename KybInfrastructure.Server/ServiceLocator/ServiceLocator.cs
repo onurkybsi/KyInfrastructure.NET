@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading;
 
 namespace KybInfrastructure.Server
 {
@@ -7,7 +9,7 @@ namespace KybInfrastructure.Server
     /// </summary>
     public class ServiceLocator
     {
-        private static ServiceLocator _instance;
+        private static readonly AsyncLocal<ServiceLocator> _instance = new();
 
         /// <summary>
         /// Instance of ServiceLocator
@@ -16,9 +18,9 @@ namespace KybInfrastructure.Server
         {
             get
             {
-                if (_instance is null)
+                if (_instance.Value is null)
                     throw new InvalidOperationException("ServiceLocator must be initialized first !");
-                return _instance;
+                return _instance.Value;
             }
         }
 
@@ -26,22 +28,24 @@ namespace KybInfrastructure.Server
         /// Initializes the ServiceLocator
         /// </summary>
         /// <param name="context">Current HttpContext</param>
-        public static void Init(IServiceProviderProxy proxy)
+        public static void Init(HttpContext context)
         {
-            ValidateIServiceProviderProxy(proxy);
-            _instance = new ServiceLocator(proxy);
+            ValidateHttpContext(context);
+            _instance.Value = new ServiceLocator(context);
         }
 
-        private static void ValidateIServiceProviderProxy(IServiceProviderProxy proxy)
+        private static void ValidateHttpContext(HttpContext context)
         {
-            if (proxy is null)
-                throw new ArgumentNullException(nameof(IServiceProviderProxy));
+            if (context is null)
+                throw new ArgumentNullException(nameof(context));
+            if (context.RequestServices is null)
+                throw new ArgumentNullException(nameof(context.RequestServices));
         }
 
-        private readonly IServiceProviderProxy _proxy;
+        private readonly HttpContext _context;
 
-        private ServiceLocator(IServiceProviderProxy proxy)
-            => _proxy = proxy;
+        private ServiceLocator(HttpContext context)
+            => _context = context;
 
         /// <summary>
         /// Returns registered service from built IServiceProvider in the application
@@ -50,6 +54,6 @@ namespace KybInfrastructure.Server
         /// <returns></returns>
         public TService GetService<TService>()
             where TService : class
-            => _proxy.GetService<TService>();
+            => (TService)_context.RequestServices.GetService(typeof(TService));
     }
 }
