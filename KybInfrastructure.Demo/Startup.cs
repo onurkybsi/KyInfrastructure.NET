@@ -22,12 +22,12 @@ namespace KybInfrastructure.Demo
                 MongoDbConnectionString = "mongodb://localhost:27017"
             });
             services.AddModule<Business.ModuleDescriptor, Business.ModuleContext>(new Business.ModuleContext());
-            services.AddServiceLocator();
             services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseServiceLocator();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

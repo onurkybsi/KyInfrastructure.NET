@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace KybInfrastructure.Demo.Client
 {
     class Program
     {
+        static List<long> mss = new List<long>();
+        static object alock = new();
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
@@ -18,7 +21,7 @@ namespace KybInfrastructure.Demo.Client
             Console.WriteLine($"-----------------------------------------------------------------------------------------------");
             //long syncPartElapsedTimeInMs = ExecuteGetRequest(10, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
             //Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
-            long asyncPartElapsedTimeInMs = ExecuteGetRequestParallel(10, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
+            long asyncPartElapsedTimeInMs = ExecuteGetRequestParallel(1000, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
             Console.WriteLine($"Async part completed in {asyncPartElapsedTimeInMs}");
             //Console.WriteLine($"All requests completed in: {syncPartElapsedTimeInMs + asyncPartElapsedTimeInMs}ms");
 
@@ -112,7 +115,6 @@ namespace KybInfrastructure.Demo.Client
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
             Stopwatch timer = new();
             timer.Start();
             using HttpWebResponse response = (HttpWebResponse)request.GetResponse();

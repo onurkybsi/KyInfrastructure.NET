@@ -6,7 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="KybInfrastructure" Version="1.0.0" />
+    <!--<PackageReference Include="KybInfrastructure" Version="1.0.0" />-->
+    <ProjectReference Include="..\KybInfrastructure.Server\KybInfrastructure.Server.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
