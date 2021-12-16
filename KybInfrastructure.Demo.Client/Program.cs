@@ -17,20 +17,8 @@ namespace KybInfrastructure.Demo.Client
         {
             Console.WriteLine("Hello World!");
 
-            Console.WriteLine($"GetAllProducts");
-            Console.WriteLine($"-----------------------------------------------------------------------------------------------");
-            //long syncPartElapsedTimeInMs = ExecuteGetRequest(10, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
-            //Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
-            long asyncPartElapsedTimeInMs = ExecuteGetRequestParallel(1000, "http://localhost:5000/product/getallproducts").ElapsedMilliseconds;
-            Console.WriteLine($"Async part completed in {asyncPartElapsedTimeInMs}");
-            //Console.WriteLine($"All requests completed in: {syncPartElapsedTimeInMs + asyncPartElapsedTimeInMs}ms");
-
-            //Console.WriteLine($"CreateUser");
-            //Console.WriteLine($"-----------------------------------------------------------------------------------------------");
-            //long syncPartElapsedTimeInMs = ExecutePostRequest(10000, "http://localhost:5000/user/createuser").ElapsedMilliseconds;
-            //Console.WriteLine($"Sync part completed in {syncPartElapsedTimeInMs}");
-            ////long asyncPartElapsedTimeInMs = ExecutePostRequestParallel(10000, "http://localhost:5000/user/createuser").ElapsedMilliseconds;
-            //Console.WriteLine($"Async part completed in {asyncPartElapsedTimeInMs}ms");
+            string bearerToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXBvc2l0b3J5LW1hbmFnZXItdGVzdC1jb25zdW1lciJ9._JPxctPm6IP7MbFM04e3Tl4vzTNZsl9l7iDq7kWDM_g";
+            object response = SendGetRequest<object>("http://localhost:8080/maas/repositoryManager/getDomains?clientName=repository-manager-test-consumer&name=test&offset=0&limit=0", 0, bearerToken);
         }
 
         public static Stopwatch ExecuteGetRequest(int requestCount, string url)
@@ -111,10 +99,13 @@ namespace KybInfrastructure.Demo.Client
             return stopwatch;
         }
 
-        public static TResponse SendGetRequest<TResponse>(string uri, int ix)
+        public static TResponse SendGetRequest<TResponse>(string uri, int ix, string bearerToken = null)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Timeout = 1000000;
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            if (bearerToken != null)
+                request.Headers.Add(HttpRequestHeader.Authorization, bearerToken);
             Stopwatch timer = new();
             timer.Start();
             using HttpWebResponse response = (HttpWebResponse)request.GetResponse();

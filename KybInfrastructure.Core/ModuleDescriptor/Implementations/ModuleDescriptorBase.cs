@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using KybInfrastructure.Core.UtilityExceptions;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// TO-DO: With the third constructor "otherModulesShouldBeLoaded" feature was added
-// Write unit tests and publish new version of Core package
 namespace KybInfrastructure.Core
 {
     /// <summary>
@@ -15,7 +14,7 @@ namespace KybInfrastructure.Core
     {
         private readonly TModuleContext _moduleContext;
         private readonly List<ServiceDescriptor> _serviceDescriptors;
-        private readonly IModuleDescriptor[] otherModulesShouldBeLoaded;
+        private readonly List<Type> _serviceTypesThatMustBeDescribed;
 
         /// <summary>
         /// IModuleDescriptor base implementation
@@ -47,19 +46,33 @@ namespace KybInfrastructure.Core
         /// IModuleDescriptor base implementation
         /// </summary>
         /// <param name="serviceDescriptors">Module's services descriptors</param>
+        /// <param name="serviceTypesThatMustBeDescribed">External service types that are used by this module</param>
+        protected ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors, List<Type> serviceTypesThatMustBeDescribed)
+        {
+            ValidateServiceDescriptors(serviceDescriptors);
+            ValidateServiceTypesThatMustBeDescribed(serviceTypesThatMustBeDescribed);
+
+            _serviceDescriptors = serviceDescriptors;
+            _moduleContext = default;
+            _serviceTypesThatMustBeDescribed = serviceTypesThatMustBeDescribed;
+        }
+
+        /// <summary>
+        /// IModuleDescriptor base implementation
+        /// </summary>
+        /// <param name="serviceDescriptors">Module's services descriptors</param>
         /// <param name="moduleContext">Module's context</param>
-        /// <param name="otherModulesShouldBeLoaded">Other modules should be loaded with this module</param>
+        /// <param name="serviceTypesThatMustBeDescribed">External service types that are used by this module</param>
         protected ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors, TModuleContext moduleContext,
-            params IModuleDescriptor[] otherModulesShouldBeLoaded)
+            List<Type> serviceTypesThatMustBeDescribed)
         {
             ValidateServiceDescriptors(serviceDescriptors);
             ValidateModuleContext(moduleContext);
-            ValidateOtherModulesShouldBeLoaded(otherModulesShouldBeLoaded);
+            ValidateServiceTypesThatMustBeDescribed(serviceTypesThatMustBeDescribed);
 
             _serviceDescriptors = serviceDescriptors;
             _moduleContext = moduleContext;
-
-            Array.ForEach(otherModulesShouldBeLoaded, module => _serviceDescriptors.AddRange(module.GetDescriptors()));
+            _serviceTypesThatMustBeDescribed = serviceTypesThatMustBeDescribed;
         }
 
         private static void ValidateServiceDescriptors(List<ServiceDescriptor> serviceDescriptors)
@@ -76,12 +89,12 @@ namespace KybInfrastructure.Core
                 throw new ArgumentNullException(nameof(moduleContext));
         }
 
-        private static void ValidateOtherModulesShouldBeLoaded(IModuleDescriptor[] otherModulesShouldBeLoaded)
+        private static void ValidateServiceTypesThatMustBeDescribed(List<Type> serviceTypesThatMustBeDescribed)
         {
-            if (otherModulesShouldBeLoaded is null)
-                throw new ArgumentNullException(nameof(otherModulesShouldBeLoaded));
-            if (otherModulesShouldBeLoaded.Any(module => module is null))
-                throw new ArgumentNullException("There is a module which is null in the module list should be loaded!");
+            if (serviceTypesThatMustBeDescribed is null)
+                throw new ArgumentNullException(nameof(serviceTypesThatMustBeDescribed));
+            if (serviceTypesThatMustBeDescribed.Any(type => type is null))
+                throw new ArgumentNullException("There is a service type which is null in the service types that must be loaded!");
         }
 
         public List<ServiceDescriptor> GetDescriptors()
@@ -89,10 +102,24 @@ namespace KybInfrastructure.Core
 
         public IServiceCollection Describe(IServiceCollection services)
         {
+            CheckServicesIsRegisteredThatMustBeRegistered(services);
+
             _serviceDescriptors
                 .ForEach(descriptor => services.Add(descriptor));
 
             return services;
+        }
+
+        private void CheckServicesIsRegisteredThatMustBeRegistered(IServiceCollection services)
+        {
+            if (_serviceTypesThatMustBeDescribed is null)
+                return;
+            _serviceTypesThatMustBeDescribed.ForEach(type =>
+            {
+                if (!services.Any(serviceMustBeAdded => serviceMustBeAdded.ServiceType == type))
+                    throw new ModuleLoadingException($"Module {this.GetType()} depend on {type}, but in the service collection, it's not exists!");
+
+            });
         }
 
         /// <summary>
@@ -106,5 +133,8 @@ namespace KybInfrastructure.Core
             else
                 return _moduleContext;
         }
+
+        protected List<Type> GetDependentServiceTypes()
+            => _serviceTypesThatMustBeDescribed ?? new();
     }
 }
