@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+// TO-DO: With the third constructor "otherModulesShouldBeLoaded" feature was added
+// Write unit tests and publish new version of Core package
 namespace KybInfrastructure.Core
 {
     /// <summary>
@@ -13,6 +15,7 @@ namespace KybInfrastructure.Core
     {
         private readonly TModuleContext _moduleContext;
         private readonly List<ServiceDescriptor> _serviceDescriptors;
+        private readonly IModuleDescriptor[] otherModulesShouldBeLoaded;
 
         /// <summary>
         /// IModuleDescriptor base implementation
@@ -40,6 +43,25 @@ namespace KybInfrastructure.Core
             _moduleContext = moduleContext;
         }
 
+        /// <summary>
+        /// IModuleDescriptor base implementation
+        /// </summary>
+        /// <param name="serviceDescriptors">Module's services descriptors</param>
+        /// <param name="moduleContext">Module's context</param>
+        /// <param name="otherModulesShouldBeLoaded">Other modules should be loaded with this module</param>
+        protected ModuleDescriptorBase(List<ServiceDescriptor> serviceDescriptors, TModuleContext moduleContext,
+            params IModuleDescriptor[] otherModulesShouldBeLoaded)
+        {
+            ValidateServiceDescriptors(serviceDescriptors);
+            ValidateModuleContext(moduleContext);
+            ValidateOtherModulesShouldBeLoaded(otherModulesShouldBeLoaded);
+
+            _serviceDescriptors = serviceDescriptors;
+            _moduleContext = moduleContext;
+
+            Array.ForEach(otherModulesShouldBeLoaded, module => _serviceDescriptors.AddRange(module.GetDescriptors()));
+        }
+
         private static void ValidateServiceDescriptors(List<ServiceDescriptor> serviceDescriptors)
         {
             if (serviceDescriptors is null)
@@ -52,6 +74,14 @@ namespace KybInfrastructure.Core
         {
             if (moduleContext is null)
                 throw new ArgumentNullException(nameof(moduleContext));
+        }
+
+        private static void ValidateOtherModulesShouldBeLoaded(IModuleDescriptor[] otherModulesShouldBeLoaded)
+        {
+            if (otherModulesShouldBeLoaded is null)
+                throw new ArgumentNullException(nameof(otherModulesShouldBeLoaded));
+            if (otherModulesShouldBeLoaded.Any(module => module is null))
+                throw new ArgumentNullException("There is a module which is null in the module list should be loaded!");
         }
 
         public List<ServiceDescriptor> GetDescriptors()
