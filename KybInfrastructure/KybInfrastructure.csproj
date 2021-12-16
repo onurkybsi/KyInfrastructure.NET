@@ -8,7 +8,7 @@
     <Description>It provides various infrastructural functionality to applications developed for .NET environments.</Description>
     <RepositoryUrl>https://github.com/onurkybsi/KybInfrastructure</RepositoryUrl>
     <PackageProjectUrl>https://github.com/onurkybsi/KybInfrastructure</PackageProjectUrl>
-	<PackageVersion>1.2.0</PackageVersion>
+	<PackageVersion>1.2.1</PackageVersion>
 	<PackageReleaseNotes>New features of the Core package was added</PackageReleaseNotes>
   </PropertyGroup>
 

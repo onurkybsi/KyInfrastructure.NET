@@ -116,7 +116,7 @@ namespace KybInfrastructure.Core
                 return;
             _serviceTypesThatMustBeDescribed.ForEach(type =>
             {
-                if (!services.Any(serviceMustBeAdded => serviceMustBeAdded.ServiceType == type))
+                if (!services.Any(serviceMustBeAdded => serviceMustBeAdded.ServiceType.AssemblyQualifiedName == type.AssemblyQualifiedName))
                     throw new ModuleLoadingException($"Module {this.GetType()} depend on {type}, but in the service collection, it's not exists!");
 
             });

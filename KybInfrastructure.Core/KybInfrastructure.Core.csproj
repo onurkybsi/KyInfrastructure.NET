@@ -10,7 +10,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageTags>.NET Stardart, .NET Core, ASP.NET Core, Infrastructure, Dependency Injection, Core</PackageTags>
 		<Product>KybInfrastructure</Product>
-		<PackageVersion>1.1.0</PackageVersion>
+		<PackageVersion>1.1.1</PackageVersion>
 		<PackageReleaseNotes>Dependency control of the described module was added to ModuleDescriptorBase with a new constructor parameter</PackageReleaseNotes>
 	</PropertyGroup>
 
